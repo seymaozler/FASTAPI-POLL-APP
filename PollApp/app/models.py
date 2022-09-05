@@ -18,6 +18,7 @@ class Poll(Base):
     id = Column(Integer, primary_key = True, nullable=False)
     title = Column(String, nullable= True)
     content = Column(String, nullable = True)
+    
 
 
 class User(Base):
