@@ -1,19 +1,29 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
-class Poll(BaseModel):
+
+class PollBase(BaseModel):
     title : str
     content : str
 
     class Config:
         orm_mode = True
 
+
+
+
+class Poll(PollBase):
+    owner_id : int
+
+    class Config:
+        orm_mode = True
+    
 class ShowPoll(Poll):
     pass
 
-class  CreatePoll(Poll):
+class  CreatePoll(PollBase):
     pass 
 
 class UpdatePoll(Poll):
@@ -33,9 +43,12 @@ class TokenData(BaseModel):
 class User(BaseModel):
     email : EmailStr
     password : str
-
+   
+ 
     class Config:
         orm_mode = True
+
+
 
 class ShowUser(User):
     pass

@@ -6,6 +6,7 @@ import imp
 from turtle import title
 from xmlrpc.client import Boolean
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import null
 from .database import Base
 from sqlalchemy.sql.sqltypes import TIMESTAMP
@@ -18,8 +19,7 @@ class Poll(Base):
     id = Column(Integer, primary_key = True, nullable=False)
     title = Column(String, nullable= True)
     content = Column(String, nullable = True)
-    
-
+    owner_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"), nullable = False)
 
 class User(Base):
     __tablename__ = 'user'

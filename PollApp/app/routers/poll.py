@@ -26,7 +26,7 @@ def get_one_poll(id: int, db: Session = Depends(get_db), current_user: int = Dep
 
 @router.post('/', response_model=schemas.CreatePoll)
 def create_poll(poll : schemas.CreatePoll,  db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    new_poll = models.Poll(**poll.dict())
+    new_poll = models.Poll(owner_id = current_user.id, **poll.dict())
     db.add(new_poll)
     db.commit()
     db.refresh(new_poll)
@@ -50,5 +50,8 @@ def delete_poll(id: int, db: Session = Depends(get_db),current_user: int = Depen
 
     poll_query.delete(synchronize_session= False)
     db.commit()
+
+    if poll.owner_id != oauth2.get_current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to perform this action")
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
